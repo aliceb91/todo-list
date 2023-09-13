@@ -32,4 +32,14 @@ describe('NotesModel', () => {
       expect(model.getNotes()).toEqual(["Test note 1", "Test note 2"]);
     });
   });
+
+  describe('setNotes', () => {
+    
+    it('sets the current values of notes to be those fed in as an argument', () => {
+      model = new NotesModel();
+      const testData = ["Test note", "Test note"];
+      model.setNotes(testData);
+      expect(model.getNotes()).toEqual(testData);
+    });
+  });
 });

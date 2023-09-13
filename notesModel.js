@@ -5,11 +5,14 @@ class NotesModel {
 
   addNote(note) {
     this.notes.push(note);
-    return;
   }
 
   getNotes() {
     return this.notes;
+  }
+
+  setNotes(data) {
+    this.notes = data;
   }
 }
 
