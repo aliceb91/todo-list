@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Bitter&display=swap');
+
+h1, p, * {
+  font-family: 'Bitter', serif;
+}
+
+html {
+  background:#303030;
+}
+
+body {
+  background: rgb(68, 197, 126);
+  width: 600px;
+  margin: auto;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.note {
+  border-bottom: 1px solid #424242;
+  padding: 15px;
+}
+
+input[type=text] {
+  width: 80%;
+  background: #fefefe;
+  border-radius: 4px;
+  padding: 10px 8px;
+  border: 1px solid #444;
+  font-size: 20px;
+}
+
+button {
+  background: #b4b4b4;
+  border-radius: 4px;
+  padding: 10px 8px;
+  border: 1px solid #444;
+  font-size: 18px;
+  cursor: pointer;
+}

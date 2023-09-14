@@ -6,8 +6,8 @@ class NotesView {
 
     document.querySelector('#add-note-btn').addEventListener('click', () => {
       const newNote = document.querySelector('#add-note-input').value;
-      this.addNewNote(newNote);
       document.querySelector('#add-note-input').value = "";
+      this.addNewNote(newNote);
     });
   }
 
@@ -20,17 +20,21 @@ class NotesView {
     });
   }
 
-  displayNotes() {
+  displayNotes(callback) {
     const divArr = this.mainContainerEl.querySelectorAll('div');
     divArr.forEach((div) => div.remove());
     const notesArr = this.model.getNotes();
-    notesArr.forEach((note) => {
-      const div = document.createElement('div');
-      div.append(note);
-      div.classList.add('note');
-      this.mainContainerEl.append(div);
-    });
-    return;
+    notesArr.forEach((note, index) => {
+      this.client.emojifyNotes(note, (emojified) => {
+        const div = document.createElement('div');
+        div.append(emojified);
+        div.classList.add('note');
+        this.mainContainerEl.append(div);
+        if (index === notesArr.length - 1) {
+          callback();
+        }
+      })
+    })
   }
 
   displayNotesFromApi(callback) {

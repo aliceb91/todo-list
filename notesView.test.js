@@ -34,16 +34,19 @@ describe('NotesView', () => {
       addNote: jest.fn()
     }
     const mockClient = {
-      createNote: jest.fn((newNote, callback) => callback(["Test note"]))
+      createNote: jest.fn((newNote, callback) => callback(["Test note"])),
+      emojifyNotes: jest.fn(() => ['Test note'])
     }
     const view = new NotesView(mockModel, mockClient);
     const input = document.querySelector('#add-note-input');
     input.value = 'Test note';
     const button = document.querySelector('#add-note-btn');
     button.click();
-    expect(document.querySelectorAll('div.note').length).toEqual(1);
-    expect(document.querySelectorAll('div.note')[0].textContent).toEqual("Test note");
-    expect(mockModel.addNote).toHaveBeenCalledWith("Test note");
+    view.displayNotes(() => {
+      expect(document.querySelectorAll('div.note').length).toEqual(1);
+      expect(document.querySelectorAll('div.note')[0].textContent).toEqual("Test note");
+      expect(mockModel.addNote).toHaveBeenCalledWith("Test note");
+    });
   });
 
   it('clears the current notes before displaying the updated notes list', () => {
@@ -52,7 +55,8 @@ describe('NotesView', () => {
       addNote: jest.fn()
     }
     const mockClient = {
-      createNote: jest.fn((newNote, callback) => callback(["Test note"]))
+      createNote: jest.fn((newNote, callback) => callback(["Test note"])),
+      emojifyNotes: jest.fn(() => ['Test note'])
     }
     const view = new NotesView(mockModel, mockClient);
     const input = document.querySelector('#add-note-input');
@@ -63,9 +67,11 @@ describe('NotesView', () => {
     button.click();
     mockModel.getNotes = jest.fn(() => ["Test note", "Test note", "Test note"]);
     button.click();
-    expect(document.querySelectorAll('div.note').length).toEqual(3);
-    expect(document.querySelectorAll('div.note')[0].textContent).toEqual("Test note");
-    expect(mockModel.addNote).toHaveBeenCalledWith("Test note");
+    view.displayNotes(() => {
+      expect(document.querySelectorAll('div.note').length).toEqual(3);
+      expect(document.querySelectorAll('div.note')[0].textContent).toEqual("Test note");
+      expect(mockModel.addNote).toHaveBeenCalledWith("Test note");
+    });
   });
 
   it('clears the text entry value when a new note is added', () => {
@@ -74,7 +80,8 @@ describe('NotesView', () => {
       addNote: jest.fn()
     }
     const mockClient = {
-      createNote: jest.fn((newNote, callback) => callback(["Test note"]))
+      createNote: jest.fn((newNote, callback) => callback(["Test note"])),
+      emojifyNotes: () => ['Test note']
     }
     const view = new NotesView(mockModel, mockClient);
     const input = document.querySelector('#add-note-input');
@@ -90,14 +97,15 @@ describe('NotesView', () => {
       getNotes: jest.fn(() => ["Test note"])
     }
     const mockClient = {
-      createNote: jest.fn((newNote, callback) => callback(["Test note"]))
+      createNote: jest.fn((newNote, callback, failCallback) => callback(["Test note"])),
+      emojifyNotes: () => ['Test note']
     }
     const view = new NotesView(mockModel, mockClient);
     const input = document.querySelector('#add-note-input');
     input.value = "Test note";
     const button = document.querySelector("#add-note-btn");
     button.click();
-    expect(view.client.createNote).toHaveBeenCalledWith("Test note", expect.anything());
+    expect(view.client.createNote).toHaveBeenCalledWith("Test note", expect.anything(), expect.anything());
   });
 
   describe('displayNotes', () => {
@@ -106,18 +114,26 @@ describe('NotesView', () => {
       mockModel = {
         getNotes: () => ['Test note 1', 'Test note 2']
       }
-      const view = new NotesView(mockModel);
-      view.displayNotes();
-      expect(view.mainContainerEl.querySelectorAll('div').length).toBe(2);
+      mockClient = {
+        emojifyNotes: () => ['Test note 1', 'Test note 2']
+      }
+      const view = new NotesView(mockModel, mockClient);
+      view.displayNotes(() => {
+        expect(view.mainContainerEl.querySelectorAll('div').length).toBe(2);
+      });
     });
 
     it('creates new divs with a note class', () => {
       mockModel = {
         getNotes: () => ['Test note 1']
       }
-      const view = new NotesView(mockModel);
-      view.displayNotes();
-      expect(view.mainContainerEl.querySelector('div').classList.contains('note')).toBe(true);
+      mockClient = {
+       emojifyNotes: () => ['Test note 1'] 
+      }
+      const view = new NotesView(mockModel, mockClient);
+      view.displayNotes(() => {
+        expect(view.mainContainerEl.querySelector('div').classList.contains('note')).toBe(true);
+      });
     });
   });
 

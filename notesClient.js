@@ -23,6 +23,16 @@ class NotesClient {
       .then((data) => success(data))
       .catch(() => fail("You can't make a new note right now!"))
   }
+
+  emojifyNotes(data, success) {
+    fetch("https://makers-emojify.herokuapp.com", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({text: data})
+    })
+      .then((response) => response.json())
+      .then((data) => success(data.emojified_text))
+  }
 }
 
 module.exports = NotesClient;
