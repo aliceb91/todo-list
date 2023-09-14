@@ -139,4 +139,15 @@ describe('NotesView', () => {
       });
     });
   });
+
+  describe('displayError', () => {
+    it('displays the error message received when an error occurs', () => {
+      const mockModel = {};
+      const mockClient = {};
+      const view = new NotesView(mockModel, mockClient);
+      error = "Oops, something went wrong!"
+      view.displayError(error);
+      expect(view.mainContainerEl.querySelector('div.error').textContent).toBe("Oops, something went wrong!");
+    });
+  });
 });

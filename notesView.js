@@ -15,7 +15,9 @@ class NotesView {
     this.model.addNote(newNote);
     this.client.createNote(newNote, () => {
       this.displayNotes();
-    })
+    }, (error) => {
+      this.displayError(error);
+    });
   }
 
   displayNotes() {
@@ -36,7 +38,16 @@ class NotesView {
       this.model.setNotes(apiNotes);
       this.displayNotes();
       callback();
-    });
+    }, (error) => {
+      this.displayError(error);
+    })
+  }
+
+  displayError(error) {
+    const errorDiv = document.createElement('div');
+    errorDiv.classList.add('error');
+    errorDiv.append(error);
+    this.mainContainerEl.append(errorDiv);
   }
 }
 
