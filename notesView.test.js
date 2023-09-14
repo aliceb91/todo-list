@@ -33,7 +33,10 @@ describe('NotesView', () => {
       getNotes: jest.fn(() => ['Test note']),
       addNote: jest.fn()
     }
-    const view = new NotesView(mockModel);
+    const mockClient = {
+      createNote: jest.fn((newNote, callback) => callback(["Test note"]))
+    }
+    const view = new NotesView(mockModel, mockClient);
     const input = document.querySelector('#add-note-input');
     input.value = 'Test note';
     const button = document.querySelector('#add-note-btn');
@@ -48,7 +51,10 @@ describe('NotesView', () => {
       getNotes: jest.fn(() => ["Test note"]),
       addNote: jest.fn()
     }
-    const view = new NotesView(mockModel);
+    const mockClient = {
+      createNote: jest.fn((newNote, callback) => callback(["Test note"]))
+    }
+    const view = new NotesView(mockModel, mockClient);
     const input = document.querySelector('#add-note-input');
     input.value = "Test note";
     const button = document.querySelector('#add-note-btn');
@@ -67,13 +73,32 @@ describe('NotesView', () => {
       getNotes: jest.fn(() => ["Test note"]),
       addNote: jest.fn()
     }
-    const view = new NotesView(mockModel);
+    const mockClient = {
+      createNote: jest.fn((newNote, callback) => callback(["Test note"]))
+    }
+    const view = new NotesView(mockModel, mockClient);
     const input = document.querySelector('#add-note-input');
     input.value = "Test note";
     const button = document.querySelector('#add-note-btn');
     button.click();
     expect(input.value).toBe("");
-  })
+  });
+
+  it('saves a new note to the API when a note is added', () => {
+    const mockModel = {
+      addNote: jest.fn(),
+      getNotes: jest.fn(() => ["Test note"])
+    }
+    const mockClient = {
+      createNote: jest.fn((newNote, callback) => callback(["Test note"]))
+    }
+    const view = new NotesView(mockModel, mockClient);
+    const input = document.querySelector('#add-note-input');
+    input.value = "Test note";
+    const button = document.querySelector("#add-note-btn");
+    button.click();
+    expect(view.client.createNote).toHaveBeenCalledWith("Test note", expect.anything());
+  });
 
   describe('displayNotes', () => {
     

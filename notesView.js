@@ -13,7 +13,9 @@ class NotesView {
 
   addNewNote(newNote) {
     this.model.addNote(newNote);
-    this.displayNotes();
+    this.client.createNote(newNote, () => {
+      this.displayNotes();
+    })
   }
 
   displayNotes() {

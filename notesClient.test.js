@@ -15,4 +15,16 @@ describe('NotesClient', () => {
       });
     });
   });
+
+  describe('createNote', () => {
+    
+    it('creates a POST request with the provided data', () => {
+      const client = new NotesClient();
+      data = "This note is being sent to the server";
+      fetch.mockResponseOnce(JSON.stringify(["This note is coming from the server", "This note is being sent to the server"]));
+      client.createNote(data, (returnedDataFromApi) => {
+        expect(returnedDataFromApi).toEqual(["This note is coming from the server", "This note is being sent to the server"]);
+      });
+    });
+  });
 });
