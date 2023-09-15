@@ -9,6 +9,12 @@ class NotesView {
       document.querySelector('#add-note-input').value = "";
       this.addNewNote(newNote);
     });
+
+    document.querySelector('#reset-notes-btn').addEventListener('click', () => {
+      this.client.reset(() => {
+        this.displayNotesFromApi(() => {})
+      });
+    });
   }
 
   addNewNote(newNote) {

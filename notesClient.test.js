@@ -27,4 +27,15 @@ describe('NotesClient', () => {
       });
     });
   });
+
+  describe('reset', () => {
+
+    it('removes all current notes from the API', () => {
+      expect.assertions(1);
+      const client = new NotesClient();
+      const testCallback = jest.fn(() => {expect(testCallback).toHaveBeenCalled();}) 
+      fetch.mockResponseOnce("")
+      client.reset(testCallback);
+    });
+  });
 });

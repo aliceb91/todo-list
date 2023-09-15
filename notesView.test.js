@@ -108,6 +108,28 @@ describe('NotesView', () => {
     expect(view.client.createNote).toHaveBeenCalledWith("Test note", expect.anything(), expect.anything());
   });
 
+  it('removes all notes when the reset button is clicked', () => {
+    const mockClient = {
+      reset: jest.fn(),
+      loadNotes: jest.fn((callback) => {callback()})
+    }
+    const mockModel = {
+      notes: [],
+      setNotes: jest.fn(() => {}),
+      getNotes: jest.fn(() => [])
+    }
+    const view = new NotesView(mockModel, mockClient);
+    const testDiv = document.createElement('div');
+    testDiv.classList.add('note');
+    view.mainContainerEl.append(testDiv);
+    expect(document.querySelectorAll('div.note').length).toBe(1);
+    const button = document.querySelector('#reset-notes-btn');
+    button.click();
+    view.displayNotes(() => {
+      expect(document.querySelectorAll('div.note').length).toBe(0);
+    });
+  });
+
   describe('displayNotes', () => {
     
     it('shows all current notes pulled from the notes model', () => {
